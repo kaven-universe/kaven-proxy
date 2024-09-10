@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Get current date
         id: current_date_time
-        uses: Kaven-Universe/github-action-current-date-time@v1.1.0
+        uses: Kaven-Universe/github-action-current-date-time@v1
         with:
           format: "YYYYMMDDHHmmss"
       - name: Checkout
