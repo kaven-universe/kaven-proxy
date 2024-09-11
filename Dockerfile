@@ -1,17 +1,20 @@
-FROM node:lts-alpine as build
+FROM node:18-alpine as build
 
 WORKDIR /app
 COPY . .
 
-RUN npm install kaven-utils && npm i -g @vercel/ncc
+RUN npm i kaven-utils && npm i -g @vercel/ncc
 RUN ncc build proxy.js -o dist
 
 
 FROM node:lts-alpine
 
 WORKDIR /app
+
 # COPY --from=build /app/dist .
 COPY --from=build /app/dist/index.js ./proxy.js
+
+RUN mkdir config
 
 LABEL name="kaven-proxy" \
     author="Kaven" \
@@ -20,4 +23,4 @@ LABEL name="kaven-proxy" \
     description=""
 
 EXPOSE 8558 8765
-CMD [ "node", "proxy.js", "config" ]
+CMD [ "node", "proxy.js", "/app/config" ]
