@@ -16,6 +16,10 @@ COPY --from=build /app/dist/index.js ./proxy.js
 
 RUN mkdir config
 
+# Install OpenSSL
+RUN apk add --no-cache openssl
+RUN openssl version
+
 LABEL name="kaven-proxy" \
     author="Kaven" \
     email="kaven@wuwenkai.com" \
