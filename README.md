@@ -4,15 +4,15 @@
 
 ```sh
 docker run --name kaven-proxy \
-        -p 8558:8558 \
-        -v "$(pwd)"/config:/app/config \
-        -d kavenzero/kaven-proxy
+    -p 8558:8558 \
+    -v "$(pwd)"/config:/app/config \
+    -d kavenzero/kaven-proxy
 
 # Or if you need to access the LAN
 docker run --name kaven-proxy \
-        --network host \
-        -v "$(pwd)"/config:/app/config \
-        -d kavenzero/kaven-proxy
+    --network host \
+    -v "$(pwd)"/config:/app/config \
+    -d kavenzero/kaven-proxy
 ```
 
 Default config:
