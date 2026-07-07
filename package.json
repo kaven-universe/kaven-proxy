@@ -1,0 +1,17 @@
+{
+	"description": "TLS-based client-server proxy with a local HTTP entry point",
+	"version": "1.0.0",
+	"type": "module",
+	"scripts": {
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix"
+	},
+	"dependencies": {
+		"kaven-basic": "^6.1.4",
+		"kaven-utils": "^6.1.7"
+	},
+	"devDependencies": {
+		"@wenkai.wu/eslint-config": "^2.4.1",
+		"eslint": "^10.6.0"
+	}
+}

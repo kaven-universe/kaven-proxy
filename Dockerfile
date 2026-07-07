@@ -1,30 +1,37 @@
-FROM node:18-alpine AS build
-
-WORKDIR /app
-COPY . .
-
-RUN npm i kaven-utils && npm i -g @vercel/ncc
-RUN ncc build proxy.js -o dist
-
-
 FROM node:lts-alpine
 
 WORKDIR /app
 
-# COPY --from=build /app/dist .
-COPY --from=build /app/dist/index.js ./proxy.js
+# Install runtime dependencies
+RUN apk add --no-cache dumb-init openssl
 
-RUN mkdir config
+# Create non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Install OpenSSL
-RUN apk add --no-cache openssl
-RUN openssl version
+# Install pnpm and only production dependencies
+RUN npm install -g pnpm
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --prod
+
+# Copy source files
+COPY proxy.js ./
+
+# Prepare runtime config directory
+RUN mkdir -p /app/config
+
+# Change ownership to non-root user
+RUN chown -R appuser:appgroup /app
+USER appuser
 
 LABEL name="kaven-proxy" \
     author="Kaven" \
     email="kaven@wuwenkai.com" \
-    version="latest" \
-    description=""
+    version="1.0.0" \
+    description="TLS-based client-server proxy with a local HTTP entry point"
 
 EXPOSE 8558 8765
-CMD [ "node", "proxy.js", "/app/config" ]
+
+# Use dumb-init as entrypoint
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+CMD ["node", "proxy.js", "/app/config"]
