@@ -1,0 +1,11 @@
+{
+    "cSpell.words": [
+        "Kaven",
+        "kaven",
+        "kavenzero",
+        "wenkai"
+    ],
+    "files.exclude": {
+        "**/node_modules": true
+    }
+}
