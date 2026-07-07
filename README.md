@@ -96,3 +96,19 @@ docker run --name kaven-proxy \
 1. Start proxy with `ku proxy ./kaven-proxy.config`
 
 **Warning**: HTTP should only be used for local proxies, do not expose them to the public network
+
+## Advanced
+
+Note that you may encounter permission issues if the container user does not have write access to these folders on the host; to resolve this, ensure the host directories are owned by the same UID and GID as the container user (see the commands below).
+
+```sh
+# Create folders if missing
+mkdir -p ./config ./logs
+
+# Get UID and GID of appuser from the container (BusyBox)
+# Note: The following command assumes a bash-compatible shell. For other shells, adjust the variable assignment as needed.
+read CON_UID CON_GID <<< $(docker run --rm kavenzero/kaven-proxy:latest sh -c 'echo $(id -u appuser) $(id -g appuser)')
+
+# Set ownership on host folders
+chown -R $CON_UID:$CON_GID ./config ./logs
+```
